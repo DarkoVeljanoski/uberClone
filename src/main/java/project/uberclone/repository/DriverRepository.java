@@ -6,4 +6,5 @@ import project.uberclone.model.entity.Driver;
 
 @Repository
 public interface DriverRepository extends JpaRepository<Driver, Long> {
+    boolean findByUsername(String username);
 }

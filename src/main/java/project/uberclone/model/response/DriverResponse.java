@@ -1,20 +1,14 @@
-package project.uberclone.model.entity;
+package project.uberclone.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.uberclone.model.entity.DriverStatusEnum;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity(name = "passenger")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Passenger {
-    @Id
-    @GeneratedValue
+@NoArgsConstructor
+public class DriverResponse {
     private Long id;
     private String email;
     private String username;
@@ -22,6 +16,7 @@ public class Passenger {
     private String name;
     private String lastname;
     private Integer age;
-
-
+    private Double pricePerKilometer;
+    private Double averageRating;
+    private DriverStatusEnum driverStatus;
 }
