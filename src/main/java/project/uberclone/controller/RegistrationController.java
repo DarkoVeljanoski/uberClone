@@ -2,6 +2,7 @@ package project.uberclone.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +15,10 @@ import project.uberclone.service.RegistrationService;
 
 @RestController
 @RequestMapping("/register")
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class RegistrationController {
 
-    private RegistrationService registrationService;
+    private final RegistrationService registrationService;
 
     @PostMapping("/driver")
     public ResponseEntity<DriverResponse> registerDriver(@RequestBody RegisterDriverRequest registerDriverRequest){

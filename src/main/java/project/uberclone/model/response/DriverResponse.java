@@ -11,7 +11,6 @@ import project.uberclone.model.entity.DriverStatusEnum;
 public class DriverResponse {
     private Long id;
     private String email;
-    private String username;
     private String password;
     private String name;
     private String lastname;

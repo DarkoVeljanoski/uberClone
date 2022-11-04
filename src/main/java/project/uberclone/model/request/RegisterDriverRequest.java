@@ -13,8 +13,6 @@ public class RegisterDriverRequest {
     @NotBlank(message = "cannot be null or empty")
     private String email;
     @NotBlank(message = "cannot be null or empty")
-    private String username;
-    @NotBlank(message = "cannot be null or empty")
     private String password;
     @NotBlank(message = "cannot be null or empty")
     private String name;

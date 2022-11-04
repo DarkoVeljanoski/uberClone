@@ -12,12 +12,11 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Passenger {
+public class Passenger{
     @Id
     @GeneratedValue
     private Long id;
     private String email;
-    private String username;
     private String password;
     private String name;
     private String lastname;
