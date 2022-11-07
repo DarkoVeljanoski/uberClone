@@ -1,5 +1,6 @@
 package project.uberclone.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.uberclone.filter.CustomAuthenticationFilter;
 import project.uberclone.filter.CustomAuthorizationFilter;
+import project.uberclone.security.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -28,14 +30,21 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final ObjectMapper objectMapper;
+
+    private final CustomUserDetailsService customUserDetailsService;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
     public SecurityConfig(UserDetailsService userDetailsService,
                           BCryptPasswordEncoder bCryptPasswordEncoder,
+                          ObjectMapper objectMapper,
+                          CustomUserDetailsService customUserDetailsService,
                           @Lazy final AuthenticationManager authenticationManager){
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.objectMapper = objectMapper;
+        this.customUserDetailsService = customUserDetailsService;
         this.authenticationManager = authenticationManager;
     }
 
@@ -57,8 +66,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
                 .and()
-                .addFilter(new CustomAuthenticationFilter(authenticationManager))
-                .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilter(new CustomAuthenticationFilter(authenticationManager, userDetailsService, objectMapper))
+                .addFilterBefore(new CustomAuthorizationFilter(customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .httpBasic()
                 .and().build();
     }

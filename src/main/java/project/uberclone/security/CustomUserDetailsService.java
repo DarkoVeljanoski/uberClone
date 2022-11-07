@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import project.uberclone.model.dto.LoggedUserDto;
 import project.uberclone.model.entity.Driver;
 import project.uberclone.service.DriverService;
 
@@ -18,13 +19,23 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private DriverService driverService;
+    private final DriverService driverService;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Driver driver = driverService.findDriverByEmail(username);
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        return new User(driver.getEmail(), driver.getPassword(), authorities);
+        return new LoggedUserDto(
+                driver.getId(),
+                driver.getName(),
+                driver.getLastname(),
+                driver.getEmail(),
+                driver.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                authorities);
     }
 }
