@@ -46,6 +46,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public void deleteDriver(Long id) {
+        checkIfExistAndReturnById(id);
         driverRepository.deleteById(id);
     }
 

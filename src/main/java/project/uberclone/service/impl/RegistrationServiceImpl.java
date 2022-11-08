@@ -10,6 +10,7 @@ import project.uberclone.model.request.RegisterDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.repository.DriverRepository;
 import project.uberclone.repository.PassengerRepository;
+import project.uberclone.service.PasswordEncoderService;
 import project.uberclone.service.RegistrationService;
 
 @Service
@@ -18,7 +19,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final DriverRepository driverRepository;
     private final PassengerRepository passengerRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoderService passwordEncoderService;
     private final ModelMapper modelMapper;
 
     @Override
@@ -27,7 +28,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new EmailAlreadyExistException();
         }
         Driver driverEntity = modelMapper.map(registerDriverRequest, Driver.class);
-        driverEntity.setPassword(passwordEncoder.encode(registerDriverRequest.getPassword()));
+        driverEntity.setPassword(passwordEncoderService.encode(registerDriverRequest.getPassword()));
         driverRepository.save(driverEntity);
         return modelMapper.map(driverEntity, DriverResponse.class);
     }
