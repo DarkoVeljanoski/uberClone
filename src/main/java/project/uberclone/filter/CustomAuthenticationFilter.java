@@ -59,7 +59,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withExpiresAt(new Date(System.currentTimeMillis() + 300 * 60 * 1000))
                 .withIssuer(request.getRequestURI().toString())
                 .sign(algorithm);
-        response.setHeader("AUTHORIZATION", access_token);
+        response.setHeader("AUTHORIZATION", "Bearer " +access_token);
 
     }
 

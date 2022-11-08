@@ -16,12 +16,12 @@ import static com.auth0.jwt.HeaderParams.ALGORITHM;
 @Component
 public class JwtUtils {
 
-    public static Algorithm ALGORITHM;
+    //public static Algorithm ALGORITHM;
 
 
     public static UsernamePasswordAuthenticationToken getFrom(String token) {
         try {
-            DecodedJWT decodedJWT = JWT.require(ALGORITHM).build().verify(token);
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256("secret")).build().verify(token);
 
             String username = decodedJWT.getSubject();
            /* String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
