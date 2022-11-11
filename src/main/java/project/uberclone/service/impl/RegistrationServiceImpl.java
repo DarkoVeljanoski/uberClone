@@ -6,8 +6,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.uberclone.exception.register.EmailAlreadyExistException;
 import project.uberclone.model.entity.Driver;
+import project.uberclone.model.entity.Passenger;
+import project.uberclone.model.request.PassengerRegistrationRequest;
 import project.uberclone.model.request.RegisterDriverRequest;
 import project.uberclone.model.response.DriverResponse;
+import project.uberclone.model.response.PassengerResponse;
 import project.uberclone.repository.DriverRepository;
 import project.uberclone.repository.PassengerRepository;
 import project.uberclone.service.PasswordEncoderService;
@@ -31,5 +34,16 @@ public class RegistrationServiceImpl implements RegistrationService {
         driverEntity.setPassword(passwordEncoderService.encode(registerDriverRequest.getPassword()));
         driverRepository.save(driverEntity);
         return modelMapper.map(driverEntity, DriverResponse.class);
+    }
+
+    @Override
+    public PassengerResponse registerPassenger(PassengerRegistrationRequest passengerRegistrationRequest) {
+        if(passengerRepository.existsByEmail(passengerRegistrationRequest.getEmail())){
+            throw new EmailAlreadyExistException();
+        }
+        Passenger passenger = modelMapper.map(passengerRegistrationRequest, Passenger.class);
+        passenger.setPassword(passwordEncoderService.encode(passengerRegistrationRequest.getPassword()));
+        passengerRepository.save(passenger);
+        return modelMapper.map(passenger, PassengerResponse.class);
     }
 }
