@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.uberclone.model.entity.Driver;
+import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
 import project.uberclone.model.request.RegisterDriverRequest;
 import project.uberclone.model.response.DriverResponse;
@@ -45,4 +47,10 @@ public class DriverController {
     public void deleteDriver(@PathVariable Long id){
         driverService.deleteDriver(id);
     }
+
+    @GetMapping("/{id}/status")
+    public DriverStatusEnum getStatusById(@PathVariable Long id){
+        return driverService.getStatusById(id);
+    }
+
 }

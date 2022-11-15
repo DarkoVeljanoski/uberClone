@@ -1,6 +1,7 @@
 package project.uberclone.service;
 
 import project.uberclone.model.entity.Driver;
+import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
 import project.uberclone.model.response.DriverResponse;
 
@@ -16,4 +17,6 @@ public interface DriverService {
     DriverResponse editDriver(Long id, EditDriverDetailsRequest editDriverRequest);
 
     void deleteDriver(Long id);
+
+    DriverStatusEnum getStatusById(Long id);
 }

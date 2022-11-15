@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import project.uberclone.exception.driver.DriverNotFoundException;
 import project.uberclone.model.entity.Driver;
+import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.repository.DriverRepository;
@@ -48,6 +49,12 @@ public class DriverServiceImpl implements DriverService {
     public void deleteDriver(Long id) {
         checkIfExistAndReturnById(id);
         driverRepository.deleteById(id);
+    }
+
+    @Override
+    public DriverStatusEnum getStatusById(Long id) {
+        Driver driver = checkIfExistAndReturnById(id);
+        return driver.getDriverStatus();
     }
 
     private Driver checkIfExistAndReturnById(Long id){
