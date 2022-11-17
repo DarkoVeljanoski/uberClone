@@ -3,6 +3,7 @@ package project.uberclone.service;
 import project.uberclone.model.entity.Driver;
 import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
+import project.uberclone.model.request.RateDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 
 import java.util.List;
@@ -19,4 +20,14 @@ public interface DriverService {
     void deleteDriver(Long id);
 
     DriverStatusEnum getStatusById(Long id);
+
+    Driver checkIfExistAndReturnById(Long id);
+
+    Boolean checkIfBusy(Long id);
+
+    void changeStatusToBusy(Driver driver);
+
+    void changeStatusToAvailable(Driver driver);
+
+    Double rateDriver(Long id, RateDriverRequest rateDriverRequest);
 }

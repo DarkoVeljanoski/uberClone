@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import project.uberclone.exception.driver.DriverNotFoundException;
+import project.uberclone.exception.driver.RatingDriverException;
 import project.uberclone.model.entity.Driver;
 import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
+import project.uberclone.model.request.RateDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.repository.DriverRepository;
 import project.uberclone.service.DriverService;
@@ -57,8 +59,41 @@ public class DriverServiceImpl implements DriverService {
         return driver.getDriverStatus();
     }
 
-    private Driver checkIfExistAndReturnById(Long id){
+    public Driver checkIfExistAndReturnById(Long id){
         return driverRepository.findById(id).orElseThrow(DriverNotFoundException::new);
+    }
+
+    @Override
+    public Boolean checkIfBusy(Long id) {
+        Driver driver = checkIfExistAndReturnById(id);
+        if (driver.getDriverStatus().equals(DriverStatusEnum.BUSY))
+            return true;
+        else return false;
+    }
+
+    @Override
+    public void changeStatusToBusy(Driver driver) {
+        driver.setDriverStatus(DriverStatusEnum.BUSY);
+        driverRepository.save(driver);
+    }
+
+    @Override
+    public void changeStatusToAvailable(Driver driver) {
+        driver.setDriverStatus(DriverStatusEnum.AVAILABLE);
+        driverRepository.save(driver);
+    }
+
+    @Override
+    public Double rateDriver(Long id, RateDriverRequest rateDriverRequest) {
+        if (rateDriverRequest.getRating() > 5.0 || rateDriverRequest.getRating() < 0.0){
+            throw new RatingDriverException();
+        }
+        Driver driver = checkIfExistAndReturnById(id);
+        driver.setTimesRated(driver.getTimesRated()+1);
+        Double newAvg = (driver.getAverageRating() + rateDriverRequest.getRating())/driver.getTimesRated();
+        driver.setAverageRating(newAvg);
+        driverRepository.save(driver);
+        return newAvg;
     }
 
     private DriverResponse mapToResponseClass(Driver driver){

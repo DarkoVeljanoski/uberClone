@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import project.uberclone.model.entity.Driver;
 import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
+import project.uberclone.model.request.RateDriverRequest;
 import project.uberclone.model.request.RegisterDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.service.DriverService;
@@ -52,5 +53,12 @@ public class DriverController {
     public DriverStatusEnum getStatusById(@PathVariable Long id){
         return driverService.getStatusById(id);
     }
+
+    @PutMapping("/{id}/rate")
+    public Double rateDriver(@PathVariable Long id, @RequestBody RateDriverRequest rateDriverRequest){
+        return driverService.rateDriver(id, rateDriverRequest);
+    }
+
+
 
 }

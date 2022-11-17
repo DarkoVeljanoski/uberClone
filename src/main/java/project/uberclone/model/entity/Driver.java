@@ -23,4 +23,9 @@ public class Driver{
     private Double pricePerKilometer;
     private Double averageRating;
     private DriverStatusEnum driverStatus;
+    private Integer timesRated;
+
+    @ManyToOne
+    @JoinColumn(name = "drive_request_id")
+    private DriveRequestEntity driveRequestEntity;
 }

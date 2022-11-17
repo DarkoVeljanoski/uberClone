@@ -13,4 +13,6 @@ public interface GeoIpService {
     String getLocalIp(HttpServletRequest request);
 
     String getClientIp(HttpServletRequest request);
+
+    Double calculateDistanceBetweenLocations(Double lat1,Double lon1,Double lat2, Double lon2, char unit);
 }

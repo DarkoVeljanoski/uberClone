@@ -33,9 +33,15 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
         Driver driverEntity = modelMapper.map(registerDriverRequest, Driver.class);
         driverEntity.setPassword(passwordEncoderService.encode(registerDriverRequest.getPassword()));
-        driverEntity.setDriverStatus(DriverStatusEnum.AVAILABLE);
+        setDriverEssentials(driverEntity);
         driverRepository.save(driverEntity);
         return modelMapper.map(driverEntity, DriverResponse.class);
+    }
+
+    private void setDriverEssentials(Driver driverEntity){
+        driverEntity.setDriverStatus(DriverStatusEnum.AVAILABLE);
+        driverEntity.setAverageRating(0.0);
+        driverEntity.setTimesRated(0);
     }
 
     @Override
