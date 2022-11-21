@@ -18,4 +18,6 @@ public class DriverResponse {
     private Double pricePerKilometer;
     private Double averageRating;
     private DriverStatusEnum driverStatus;
+    private Double latitude;
+    private Double longitude;
 }

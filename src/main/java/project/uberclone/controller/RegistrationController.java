@@ -1,7 +1,6 @@
 package project.uberclone.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import project.uberclone.model.entity.Passenger;
 import project.uberclone.model.request.PassengerRegistrationRequest;
 import project.uberclone.model.request.RegisterDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.model.response.PassengerResponse;
-import project.uberclone.repository.PassengerRepository;
 import project.uberclone.service.RegistrationService;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/register")
@@ -25,9 +25,9 @@ public class RegistrationController {
     private final RegistrationService registrationService;
 
     @PostMapping("/driver")
-    public ResponseEntity<DriverResponse> registerDriver(@RequestBody RegisterDriverRequest registerDriverRequest){
+    public ResponseEntity<DriverResponse> registerDriver(@RequestBody RegisterDriverRequest registerDriverRequest, HttpServletRequest request) throws IOException, GeoIp2Exception {
         ResponseEntity<DriverResponse> responseEntity =
-                new ResponseEntity<>(registrationService.registerDriver(registerDriverRequest), HttpStatus.OK);
+                new ResponseEntity<>(registrationService.registerDriver(registerDriverRequest, request), HttpStatus.OK);
         return responseEntity;
     }
 

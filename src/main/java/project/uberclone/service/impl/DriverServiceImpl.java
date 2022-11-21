@@ -1,5 +1,6 @@
 package project.uberclone.service.impl;
 
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,11 @@ import project.uberclone.model.request.RateDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.repository.DriverRepository;
 import project.uberclone.service.DriverService;
+import project.uberclone.service.GeoIpService;
+import project.uberclone.service.RegistrationService;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +27,8 @@ public class DriverServiceImpl implements DriverService {
 
     private final DriverRepository driverRepository;
     private final ModelMapper modelMapper;
+
+    private final RegistrationServiceImpl registrationService;
     @Override
     public Driver findDriverByEmail(String username) {
         return driverRepository.findByEmail(username);
@@ -78,8 +85,9 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public void changeStatusToAvailable(Driver driver) {
+    public void changeStatusToAvailable(Driver driver, HttpServletRequest request) throws IOException, GeoIp2Exception {
         driver.setDriverStatus(DriverStatusEnum.AVAILABLE);
+        registrationService.setDriverLocation(driver, request);
         driverRepository.save(driver);
     }
 

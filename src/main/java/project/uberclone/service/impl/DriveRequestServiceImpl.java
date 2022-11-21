@@ -1,5 +1,6 @@
 package project.uberclone.service.impl;
 
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import project.uberclone.model.response.DriveRequestResponse;
 import project.uberclone.repository.DriveRequestRepository;
 import project.uberclone.service.DriveRequestService;
 import project.uberclone.service.DriverService;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -41,11 +45,11 @@ public class DriveRequestServiceImpl implements DriveRequestService {
     }
 
     @Override
-    public void deleteDriveRequest(Long id) {
+    public void deleteDriveRequest(Long id, HttpServletRequest request) throws IOException, GeoIp2Exception {
         DriveRequestEntity driveRequestEntity = checkIfRequestExist(id);
         Long driverId = driveRequestEntity.getDriverId();
         Driver driver = driverService.checkIfExistAndReturnById(driverId);
-        driverService.changeStatusToAvailable(driver);
+        driverService.changeStatusToAvailable(driver,request);
         driveRequestRepository.deleteById(id);
     }
 

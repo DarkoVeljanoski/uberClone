@@ -1,5 +1,6 @@
 package project.uberclone.service.impl;
 
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.mock.web.MockHttpServletRequest;
 import project.uberclone.model.entity.DriveRequestEntity;
 import project.uberclone.model.request.DriveRequestRequest;
 import project.uberclone.model.response.DriveRequestResponse;
@@ -15,6 +17,7 @@ import project.uberclone.repository.DriveRequestRepository;
 import project.uberclone.utils.DriveRequestEntityUtil;
 import project.uberclone.utils.DriveRequestRequestUtil;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,11 +66,12 @@ class DriveRequestServiceImplTest {
     }
 
     @Test
-    void deleteDriveRequest(){
+    void deleteDriveRequest() throws IOException, GeoIp2Exception {
         DriveRequestEntity expectedDriveRequestEntity = DriveRequestEntityUtil.get();
         when(driveRequestRepository.findById(any())).thenReturn(Optional.of(expectedDriveRequestEntity));
 
-        driveRequestService.deleteDriveRequest(expectedDriveRequestEntity.getId());
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        driveRequestService.deleteDriveRequest(expectedDriveRequestEntity.getId(),request);
         verify(driveRequestRepository).deleteById(expectedDriveRequestEntity.getId());
     }
 

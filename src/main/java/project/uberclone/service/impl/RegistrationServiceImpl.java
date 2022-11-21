@@ -1,8 +1,8 @@
 package project.uberclone.service.impl;
 
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.uberclone.exception.register.EmailAlreadyExistException;
 import project.uberclone.model.entity.Driver;
@@ -11,11 +11,16 @@ import project.uberclone.model.entity.Passenger;
 import project.uberclone.model.request.PassengerRegistrationRequest;
 import project.uberclone.model.request.RegisterDriverRequest;
 import project.uberclone.model.response.DriverResponse;
+import project.uberclone.model.response.GeoIpResponse;
 import project.uberclone.model.response.PassengerResponse;
 import project.uberclone.repository.DriverRepository;
 import project.uberclone.repository.PassengerRepository;
+import project.uberclone.service.GeoIpService;
 import project.uberclone.service.PasswordEncoderService;
 import project.uberclone.service.RegistrationService;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +31,17 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final PasswordEncoderService passwordEncoderService;
     private final ModelMapper modelMapper;
 
+    private final GeoIpService geoIpService;
+
     @Override
-    public DriverResponse registerDriver(RegisterDriverRequest registerDriverRequest) {
+    public DriverResponse registerDriver(RegisterDriverRequest registerDriverRequest, HttpServletRequest request) throws IOException, GeoIp2Exception {
         if(driverRepository.existsByEmail(registerDriverRequest.getEmail())){
             throw new EmailAlreadyExistException();
         }
         Driver driverEntity = modelMapper.map(registerDriverRequest, Driver.class);
         driverEntity.setPassword(passwordEncoderService.encode(registerDriverRequest.getPassword()));
         setDriverEssentials(driverEntity);
+        setDriverLocation(driverEntity,request);
         driverRepository.save(driverEntity);
         return modelMapper.map(driverEntity, DriverResponse.class);
     }
@@ -42,6 +50,16 @@ public class RegistrationServiceImpl implements RegistrationService {
         driverEntity.setDriverStatus(DriverStatusEnum.AVAILABLE);
         driverEntity.setAverageRating(0.0);
         driverEntity.setTimesRated(0);
+    }
+
+    public void setDriverLocation(Driver driverEntity,HttpServletRequest request) throws IOException, GeoIp2Exception {
+       // String ip = geoIpService.getClientIp(request);
+        String manualIp = "89.205.124.122";
+        GeoIpResponse geoIpResponse = geoIpService.getIpLocation(manualIp);
+        Double latitude = geoIpResponse.getLatitude();
+        Double longitude = geoIpResponse.getLongitude();
+        driverEntity.setLatitude(latitude);
+        driverEntity.setLongitude(longitude);
     }
 
     @Override

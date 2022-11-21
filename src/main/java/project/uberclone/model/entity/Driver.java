@@ -24,6 +24,8 @@ public class Driver{
     private Double averageRating;
     private DriverStatusEnum driverStatus;
     private Integer timesRated;
+    private Double latitude;
+    private Double longitude;
 
     @ManyToOne
     @JoinColumn(name = "drive_request_id")

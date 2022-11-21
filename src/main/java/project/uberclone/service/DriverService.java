@@ -1,11 +1,14 @@
 package project.uberclone.service;
 
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import project.uberclone.model.entity.Driver;
 import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
 import project.uberclone.model.request.RateDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 public interface DriverService {
@@ -27,7 +30,7 @@ public interface DriverService {
 
     void changeStatusToBusy(Driver driver);
 
-    void changeStatusToAvailable(Driver driver);
+    void changeStatusToAvailable(Driver driver, HttpServletRequest request) throws IOException, GeoIp2Exception;
 
     Double rateDriver(Long id, RateDriverRequest rateDriverRequest);
 }
