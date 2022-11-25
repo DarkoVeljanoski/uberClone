@@ -1,6 +1,8 @@
 package project.uberclone.service;
 
 import project.uberclone.model.request.EditPassengerDetailsRequest;
+import project.uberclone.model.request.SearchByNearestDriverRequest;
+import project.uberclone.model.response.DriverResponse;
 import project.uberclone.model.response.PassengerResponse;
 
 import java.util.List;
@@ -13,6 +15,4 @@ public interface PassengerService {
     PassengerResponse editPassenger(Long id, EditPassengerDetailsRequest editPassengerDetailsRequest);
 
     void deletePassenger(Long id);
-
-
 }

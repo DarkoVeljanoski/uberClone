@@ -20,4 +20,5 @@ public class DriverResponse {
     private DriverStatusEnum driverStatus;
     private Double latitude;
     private Double longitude;
+    private Double distanceToPassenger;
 }

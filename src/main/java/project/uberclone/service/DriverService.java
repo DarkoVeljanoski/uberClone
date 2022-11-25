@@ -5,6 +5,7 @@ import project.uberclone.model.entity.Driver;
 import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
 import project.uberclone.model.request.RateDriverRequest;
+import project.uberclone.model.request.SearchByNearestDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,4 +34,10 @@ public interface DriverService {
     void changeStatusToAvailable(Driver driver, HttpServletRequest request) throws IOException, GeoIp2Exception;
 
     Double rateDriver(Long id, RateDriverRequest rateDriverRequest);
+
+    List<DriverResponse> searchByNearestDriver(SearchByNearestDriverRequest searchByNearestDriverRequest);
+
+    List<DriverResponse> sortByPricePerKm();
+
+    List<DriverResponse> sortByRating();
 }

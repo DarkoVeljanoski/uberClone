@@ -9,6 +9,7 @@ import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
 import project.uberclone.model.request.RateDriverRequest;
 import project.uberclone.model.request.RegisterDriverRequest;
+import project.uberclone.model.request.SearchByNearestDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.service.DriverService;
 
@@ -18,10 +19,6 @@ import java.util.List;
 @RequestMapping("/drivers")
 @RequiredArgsConstructor
 public class DriverController {
-
-    //TODO: get coordinates
-
-    // TODO: handle driving request
 
     private final DriverService driverService;
 
@@ -58,6 +55,23 @@ public class DriverController {
     public Double rateDriver(@PathVariable Long id, @RequestBody RateDriverRequest rateDriverRequest){
         return driverService.rateDriver(id, rateDriverRequest);
     }
+
+    @PutMapping("/searchByNearest")
+    public List<DriverResponse> searchByNearest(@RequestBody SearchByNearestDriverRequest searchByNearestDriverRequest){
+        return driverService.searchByNearestDriver(searchByNearestDriverRequest);
+    }
+
+    @GetMapping("/sortByPrice")
+    public List<DriverResponse> sortByPricePerKm(){
+        return driverService.sortByPricePerKm();
+    }
+
+    @GetMapping("/sortByRating")
+    public List<DriverResponse> sortByRating(){
+        return driverService.sortByRating();
+    }
+
+
 
 
 

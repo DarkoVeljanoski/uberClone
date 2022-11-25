@@ -8,11 +8,14 @@ import project.uberclone.exception.passenger.PassengerNotFoundException;
 import project.uberclone.model.entity.Driver;
 import project.uberclone.model.entity.Passenger;
 import project.uberclone.model.request.EditPassengerDetailsRequest;
+import project.uberclone.model.request.SearchByNearestDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.model.response.PassengerResponse;
 import project.uberclone.repository.PassengerRepository;
+import project.uberclone.service.DriverService;
 import project.uberclone.service.PassengerService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +50,6 @@ public class PassengerServiceImpl implements PassengerService {
         checkIfExistAndReturnById(id);
         passengerRepository.deleteById(id);
     }
-
 
     private Passenger checkIfExistAndReturnById(Long id){
         return passengerRepository.findById(id).orElseThrow(PassengerNotFoundException::new);

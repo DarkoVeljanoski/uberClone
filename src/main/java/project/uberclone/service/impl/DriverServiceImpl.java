@@ -10,6 +10,7 @@ import project.uberclone.model.entity.Driver;
 import project.uberclone.model.entity.DriverStatusEnum;
 import project.uberclone.model.request.EditDriverDetailsRequest;
 import project.uberclone.model.request.RateDriverRequest;
+import project.uberclone.model.request.SearchByNearestDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.repository.DriverRepository;
 import project.uberclone.service.DriverService;
@@ -18,6 +19,7 @@ import project.uberclone.service.RegistrationService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,8 @@ public class DriverServiceImpl implements DriverService {
 
     private final DriverRepository driverRepository;
     private final ModelMapper modelMapper;
+
+    private final GeoIpServiceImpl geoIpService;
 
     private final RegistrationServiceImpl registrationService;
     @Override
@@ -102,6 +106,30 @@ public class DriverServiceImpl implements DriverService {
         driver.setAverageRating(newAvg);
         driverRepository.save(driver);
         return newAvg;
+    }
+
+    @Override
+    public List<DriverResponse> searchByNearestDriver(SearchByNearestDriverRequest searchByNearestDriverRequest) {
+        Double passengerLongitude = searchByNearestDriverRequest.getLongitude();
+        Double passengerLatitude = searchByNearestDriverRequest.getLatitude();
+        List<DriverResponse> list = getAllDrivers();
+        for (int i =0; i<list.size();i++){
+            Double lat = list.get(i).getLatitude();
+            Double lon = list.get(i).getLongitude();
+            Double dist = geoIpService.calculateDistanceBetweenLocations(passengerLatitude,passengerLongitude,lat,lon,'K');
+            list.get(i).setDistanceToPassenger(dist);
+        }
+        return list.stream().sorted(Comparator.comparing(DriverResponse::getDistanceToPassenger)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DriverResponse> sortByPricePerKm() {
+        return getAllDrivers().stream().sorted(Comparator.comparing(DriverResponse::getPricePerKilometer)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DriverResponse> sortByRating() {
+        return getAllDrivers().stream().sorted(Comparator.comparing(DriverResponse::getAverageRating)).collect(Collectors.toList());
     }
 
     private DriverResponse mapToResponseClass(Driver driver){

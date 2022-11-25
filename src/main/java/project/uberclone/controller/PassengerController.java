@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.uberclone.model.request.EditDriverDetailsRequest;
 import project.uberclone.model.request.EditPassengerDetailsRequest;
+import project.uberclone.model.request.SearchByNearestDriverRequest;
 import project.uberclone.model.response.DriverResponse;
 import project.uberclone.model.response.PassengerResponse;
 import project.uberclone.service.PassengerService;

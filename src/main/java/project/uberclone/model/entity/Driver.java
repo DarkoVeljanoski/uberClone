@@ -26,6 +26,7 @@ public class Driver{
     private Integer timesRated;
     private Double latitude;
     private Double longitude;
+    private Double distanceToPassenger;
 
     @ManyToOne
     @JoinColumn(name = "drive_request_id")
